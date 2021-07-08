@@ -3,8 +3,8 @@ plugins {
     `maven-publish`
 }
 
-group = "com.example"
-version = "1.0.0"
+group = "com.new-example"
+version = "2.0.0"
 
 repositories {
     mavenCentral()
@@ -14,6 +14,22 @@ publishing {
     publications {
         create<MavenPublication>("library") {
             from(components["java"])
+        }
+
+        create<MavenPublication>("relocation") {
+            pom {
+                // Old artifact coordinates
+                groupId = "com.example"
+                artifactId = "lib"
+                version = "2.0.0"
+
+                distributionManagement {
+                    relocation {
+                        groupId.set("com.new-example")
+                        message.set("groupId has been changed")
+                    }
+                }
+            }
         }
     }
 
